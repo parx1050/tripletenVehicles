@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 
 df_vehicles = pd.read_csv('./vehicles_us.csv')
+df_first_table = df_vehicles
 
 st.header('Welcome to the Vehicles App!')
 st.write('This is a small test application for running and ' +
@@ -14,15 +15,15 @@ factor2 = st.checkbox('Vehicles Released in 2014 Only')
 factor3 = st.checkbox('Vehicles Listed for More Than 100 Days Only')
 factor4 = st.checkbox('Manual Transmission Only')
 if factor1:
-    df_vehicles = df_vehicles[df_vehicles['price'] >= 100000]
+    df_first_table = df_first_table[df_first_table['price'] >= 100000]
 if factor2:
-    df_vehicles = df_vehicles[df_vehicles['model_year'] == 2014]
+    df_first_table = df_first_table[df_first_table['model_year'] == 2014]
 if factor3:
-    df_vehicles = df_vehicles[df_vehicles['days_listed'] >= 100]
+    df_first_table = df_first_table[df_first_table['days_listed'] >= 100]
 if factor4:
-    df_vehicles = df_vehicles[df_vehicles['transmission'] == 'manual']
-st.write(df_vehicles)
-count = len(df_vehicles.index)
+    df_first_table = df_first_table[df_first_table['transmission'] == 'manual']
+st.write(df_first_table)
+count = len(df_first_table.index)
 st.write('There are ' + str(count) + ' result(s) to show.')
 
 st.header('Vehicle Histograms')
