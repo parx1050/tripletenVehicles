@@ -2,7 +2,7 @@
 
 Hello! Welcome to my Sprint 4 Project: A Sample Application
 
-This application can be run with Streamlit on a local server or with Render: {link}
+This application can be run with Streamlit on a local server or with Render: https://tripletenvehicles.onrender.com
 
 The following details the heirarchy of the project:
 ├── README.md
