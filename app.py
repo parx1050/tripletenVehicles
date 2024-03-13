@@ -1,21 +1,27 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import numpy as np
 
 df_vehicles = pd.read_csv('./vehicles_us.csv')
 
 # Lines 7 to 57 are a shortened version of the preprocessing actions done in the EDA.ipynb file:
-model_year_median = df_vehicles['model_year'].median()
-df_vehicles['model_year'] = df_vehicles['model_year'].fillna(model_year_median)
-df_vehicles['model_year'] = df_vehicles['model_year'].astype('int')
+df_vehicles['model_year'] = df_vehicles['model_year'].fillna(-1.0)
+df_vehicles['model_year'] = df_vehicles['model_year'].astype('Int64')
+df_vehicles['model_year'] = df_vehicles['model_year'].replace(-1, np.nan)
 
-cylinders_median = df_vehicles['cylinders'].median()
-df_vehicles['cylinders'] = df_vehicles['cylinders'].fillna(cylinders_median)
-df_vehicles['cylinders'] = df_vehicles['cylinders'].astype('int')
+data_grouped_by_model_and_model_year = df_vehicles.groupby(['model_year', 'model'])['cylinders'].median()
+data_merged = df_vehicles.merge(data_grouped_by_model_and_model_year, 
+                        on=['model', 'model_year'], 
+                        how='left',
+                        suffixes=['_old', '_new'])
+data_merged['cylinders_old'] = data_merged['cylinders_old'].fillna(data_merged['cylinders_new'])
+data_merged = data_merged.drop('cylinders_new', axis='columns')
+df_vehicles = data_merged.rename(columns={'cylinders_old': 'cylinders'})
 
-odometer_median = df_vehicles['odometer'].median()
-df_vehicles['odometer'] = df_vehicles['odometer'].fillna(odometer_median)
-df_vehicles['odometer'] = df_vehicles['odometer'].astype('int')
+df_vehicles['odometer'] = df_vehicles['odometer'].fillna(-1.0)
+df_vehicles['odometer'] = df_vehicles['odometer'].astype('Int64')
+df_vehicles['odometer'] = df_vehicles['odometer'].replace(-1, np.nan)
 
 df_vehicles['paint_color'] = df_vehicles['paint_color'].fillna('no color recorded')
 
